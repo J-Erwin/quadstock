@@ -1,0 +1,43 @@
+name: QuadStock
+main: com.thaalur.quadstock.QuadStockPlugin
+version: ${version}
+api-version: '26.3'
+description: Configurable stock markets with recorded history, portfolio reports, and SQLite settlement
+libraries:
+  - org.xerial:sqlite-jdbc:3.53.4.0
+softdepend: [QuickShop-Hikari, Vault]
+permissions:
+  quadstock.use:
+    description: Browse markets, holdings and price history
+    default: true
+  quadstock.trade:
+    description: Request and confirm buy and sell orders
+    default: true
+  quadstock.reports:
+    description: Read industry reports and subscribe to private updates
+    default: true
+  quadstock.player:
+    description: Standard player permission bundle for LuckPerms groups
+    default: false
+    children:
+      quadstock.use: true
+      quadstock.trade: true
+      quadstock.reports: true
+  quadstock.admin:
+    description: Administer configuration, reload QuadStock and inspect commerce
+    default: op
+    children:
+      quadstock.player: true
+      quadstock.commerce.inspect: true
+      quadstock.display.admin: true
+  quadstock.display.admin:
+    description: Create, configure and remove physical market displays
+    default: op
+  quadstock.commerce.inspect:
+    description: Inspect session commerce diagnostics including participant identifiers
+    default: op
+commands:
+  quadstock:
+    description: Open the QuadStock living market
+    usage: /quadstock [market|portfolio|reports|clock|status|subscribe|unsubscribe|commerce|preview|transactions|trade|performance|ticker|config|reload|display]
+    aliases: [qm]

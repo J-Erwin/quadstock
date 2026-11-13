@@ -1,0 +1,769 @@
+# Fictional company news. Text never changes event probability or economic strength.
+# Supported placeholders: {company}, {ticker}. See docs/admin-guide.md.
+version: 1
+collections:
+  generic:
+    positive:
+      - id: positive_1
+        headline: "Workshop efficiency improves"
+        description: "New methods help {company} produce more with existing equipment."
+      - id: positive_2
+        headline: "Orders gather momentum"
+        description: "A wider order book improves the outlook for {company}."
+      - id: positive_3
+        headline: "Supply routes improve"
+        description: "Reliable deliveries ease operating pressure at {company}."
+    negative:
+      - id: negative_1
+        headline: "Equipment upkeep rises"
+        description: "Maintenance bills weigh on the outlook for {company}."
+      - id: negative_2
+        headline: "Orders soften"
+        description: "A quieter order book leaves some capacity unused at {company}."
+      - id: negative_3
+        headline: "Deliveries run late"
+        description: "Supply delays increase operating costs at {company}."
+    neutral:
+      - id: neutral_1
+        headline: "Routine inventory review"
+        description: "{company} finishes its stock count with expectations unchanged."
+      - id: neutral_2
+        headline: "Quarterly planning begins"
+        description: "Managers at {company} review schedules without revising their outlook."
+      - id: neutral_3
+        headline: "Workshops change shifts"
+        description: "A routine shift rotation leaves production expectations unchanged."
+    special-positive:
+      - id: special_positive_1
+        headline: "Major production breakthrough"
+        description: "A new process could substantially improve output at {company}."
+      - id: special_positive_2
+        headline: "Landmark contract secured"
+        description: "A major long-term agreement strengthens the business outlook for {company}."
+    special-negative:
+      - id: special_negative_1
+        headline: "Industrial complex damaged"
+        description: "A severe fictional accident destroys equipment and interrupts operations at {company}."
+      - id: special_negative_2
+        headline: "Distribution network disrupted"
+        description: "A widespread fictional transport failure threatens a large share of deliveries at {company}."
+  farming:
+    positive:
+      - id: positive_1
+        headline: "Healthy harvest forecast"
+        description: "Strong crop growth improves expected yields at {company}."
+      - id: positive_2
+        headline: "Irrigation improvements"
+        description: "Better water distribution reduces waste across the fields of {company}."
+      - id: positive_3
+        headline: "Seed quality improves"
+        description: "Reliable seed stocks strengthen next season’s production outlook."
+    negative:
+      - id: negative_1
+        headline: "Pests pressure yields"
+        description: "Crop damage raises treatment costs and reduces expected output at {company}."
+      - id: negative_2
+        headline: "Fertilizer costs rise"
+        description: "Higher soil-treatment costs squeeze expected farming margins."
+      - id: negative_3
+        headline: "Harvest delays"
+        description: "Wet fields slow harvesting and increase labor costs at {company}."
+    neutral:
+      - id: neutral_1
+        headline: "Planting season begins"
+        description: "Farm crews prepare their usual acreage with expectations unchanged."
+      - id: neutral_2
+        headline: "Grain stores inspected"
+        description: "Routine inspections find no material change in stored crop quality."
+      - id: neutral_3
+        headline: "Fields enter rotation"
+        description: "Scheduled crop rotation proceeds without altering the seasonal outlook."
+    special-positive:
+      - id: special_positive_1
+        headline: "Exceptional growing season"
+        description: "Unusually favorable conditions promise a bumper harvest across the farms of {company}."
+      - id: special_positive_2
+        headline: "Resilient crop breakthrough"
+        description: "A successful cultivation method could sharply reduce crop losses at {company}."
+    special-negative:
+      - id: special_negative_1
+        headline: "Wildfires devastate farmland"
+        description: "Fictional wildfires destroy fields and equipment, severely reducing expected output at {company}."
+      - id: special_negative_2
+        headline: "Regional crop blight"
+        description: "A widespread fictional blight ruins crops and threatens major revenue losses at {company}."
+  mining:
+    positive:
+      - id: positive_1
+        headline: "Promising ore samples"
+        description: "Survey results suggest improved yields in the workings of {company}."
+      - id: positive_2
+        headline: "Extraction methods improve"
+        description: "More efficient digging reduces expected mining costs."
+      - id: positive_3
+        headline: "Haulage routes cleared"
+        description: "Shorter haulage delays improve mine productivity at {company}."
+    negative:
+      - id: negative_1
+        headline: "Ore grades weaken"
+        description: "Lower-quality seams require more work for each unit extracted."
+      - id: negative_2
+        headline: "Pumping costs rise"
+        description: "Water seepage increases operating expenses in the mines of {company}."
+      - id: negative_3
+        headline: "Tool wear accelerates"
+        description: "Frequent tool replacement weighs on expected mining margins."
+    neutral:
+      - id: neutral_1
+        headline: "Survey crews rotate"
+        description: "Geologists begin routine surveys without revising reserve estimates."
+      - id: neutral_2
+        headline: "Shaft inspection completed"
+        description: "Scheduled safety inspections leave the operating outlook unchanged."
+      - id: neutral_3
+        headline: "Mining plans reviewed"
+        description: "{company} maintains its existing extraction schedule."
+    special-positive:
+      - id: special_positive_1
+        headline: "Rich mineral vein discovered"
+        description: "An exceptional deposit could substantially expand profitable output at {company}."
+      - id: special_positive_2
+        headline: "Major shaft expansion succeeds"
+        description: "New access opens a large productive reserve for {company}."
+    special-negative:
+      - id: special_negative_1
+        headline: "Major tunnel collapse"
+        description: "A fictional collapse closes key workings and destroys equipment at {company}."
+      - id: special_negative_2
+        headline: "Deep mine flooding"
+        description: "Severe fictional flooding halts extraction and demands expensive repairs."
+  forestry:
+    positive:
+      - id: positive_1
+        headline: "Sapling survival improves"
+        description: "Healthy young trees strengthen the long-term timber outlook."
+      - id: positive_2
+        headline: "Harvest crews gain efficiency"
+        description: "Improved cutting schedules reduce costs at {company}."
+      - id: positive_3
+        headline: "Forest roads repaired"
+        description: "Reliable access lowers transport delays for timber crews."
+    negative:
+      - id: negative_1
+        headline: "Tree disease spreads"
+        description: "Localized disease reduces the amount of usable timber."
+      - id: negative_2
+        headline: "Hauling costs increase"
+        description: "Difficult forest access raises expected extraction expenses."
+      - id: negative_3
+        headline: "Timber quality declines"
+        description: "More damaged logs reduce the value of expected harvests."
+    neutral:
+      - id: neutral_1
+        headline: "Forest survey underway"
+        description: "Routine woodland surveys leave harvest estimates unchanged."
+      - id: neutral_2
+        headline: "Replanting crews deployed"
+        description: "Scheduled replanting proceeds as planned at {company}."
+      - id: neutral_3
+        headline: "Cutting permits reviewed"
+        description: "Regular permit reviews produce no change to the harvest schedule."
+    special-positive:
+      - id: special_positive_1
+        headline: "Exceptional timber stand found"
+        description: "A large high-quality woodland reserve improves the outlook for {company}."
+      - id: special_positive_2
+        headline: "Regrowth program excels"
+        description: "An unusually successful planting program expands future timber supply."
+    special-negative:
+      - id: special_negative_1
+        headline: "Forest fire destroys reserves"
+        description: "A fictional wildfire destroys a large share of harvestable woodland."
+      - id: special_negative_2
+        headline: "Severe windthrow"
+        description: "A fictional storm devastates timber stands and blocks forest access."
+  fishing:
+    positive:
+      - id: positive_1
+        headline: "Healthy coastal schools"
+        description: "Strong fish populations improve expected catches for {company}."
+      - id: positive_2
+        headline: "Nets become more efficient"
+        description: "Improved equipment reduces time spent on each catch."
+      - id: positive_3
+        headline: "Cold storage improves"
+        description: "Better handling reduces spoilage and supports fishing margins."
+    negative:
+      - id: negative_1
+        headline: "Rough seas delay boats"
+        description: "Difficult conditions reduce the number of productive fishing trips."
+      - id: negative_2
+        headline: "Catch quality weakens"
+        description: "Smaller catches and lower grades weigh on the fleet’s outlook."
+      - id: negative_3
+        headline: "Vessel repairs mount"
+        description: "Maintenance costs increase across the fleet of {company}."
+    neutral:
+      - id: neutral_1
+        headline: "Fleet inspection completed"
+        description: "Routine vessel checks leave operating expectations unchanged."
+      - id: neutral_2
+        headline: "Seasonal routes reviewed"
+        description: "Captains retain their usual routes after a scheduled review."
+      - id: neutral_3
+        headline: "Dock schedules updated"
+        description: "Routine unloading changes leave catch forecasts unchanged."
+    special-positive:
+      - id: special_positive_1
+        headline: "Abundant fishing grounds discovered"
+        description: "New grounds promise exceptionally productive trips for {company}."
+      - id: special_positive_2
+        headline: "Preservation breakthrough"
+        description: "A major handling improvement could sharply reduce spoilage across the fleet."
+    special-negative:
+      - id: special_negative_1
+        headline: "Severe storm damages fleet"
+        description: "A fictional storm disables vessels and interrupts a large share of fishing operations."
+      - id: special_negative_2
+        headline: "Coastal fishery collapse"
+        description: "A fictional ecological shock sharply reduces catch prospects for {company}."
+  livestock:
+    positive:
+      - id: positive_1
+        headline: "Herd health improves"
+        description: "Better animal health reduces losses and strengthens output forecasts."
+      - id: positive_2
+        headline: "Feed efficiency rises"
+        description: "Improved feeding routines lower production costs at {company}."
+      - id: positive_3
+        headline: "Breeding results improve"
+        description: "Healthy new stock supports the livestock production outlook."
+    negative:
+      - id: negative_1
+        headline: "Feed prices rise"
+        description: "Higher feed costs squeeze expected livestock margins."
+      - id: negative_2
+        headline: "Veterinary bills increase"
+        description: "Localized health problems raise treatment costs at {company}."
+      - id: negative_3
+        headline: "Growth rates slow"
+        description: "Slower animal growth delays expected production."
+    neutral:
+      - id: neutral_1
+        headline: "Herd census completed"
+        description: "A routine count leaves livestock forecasts unchanged."
+      - id: neutral_2
+        headline: "Pasture rotation begins"
+        description: "Scheduled grazing changes proceed without revising the outlook."
+      - id: neutral_3
+        headline: "Barn inspections finished"
+        description: "Regular inspections find no material change in operating conditions."
+    special-positive:
+      - id: special_positive_1
+        headline: "Herd expansion exceeds forecasts"
+        description: "An exceptional breeding season expands productive capacity at {company}."
+      - id: special_positive_2
+        headline: "Major husbandry advance"
+        description: "A successful care program could substantially reduce animal losses."
+    special-negative:
+      - id: special_negative_1
+        headline: "Livestock epidemic"
+        description: "A fictional outbreak causes major herd losses and disrupts production."
+      - id: special_negative_2
+        headline: "Feed supply crisis"
+        description: "A fictional regional failure cuts feed availability and threatens livestock output."
+  food:
+    positive:
+      - id: positive_1
+        headline: "Bakery output improves"
+        description: "More reliable ovens increase production efficiency at {company}."
+      - id: positive_2
+        headline: "Ingredient supply stabilizes"
+        description: "Consistent ingredient deliveries support expected food margins."
+      - id: positive_3
+        headline: "New recipes find buyers"
+        description: "A successful product line strengthens the order outlook."
+    negative:
+      - id: negative_1
+        headline: "Ingredient costs climb"
+        description: "Higher input costs reduce expected food-production margins."
+      - id: negative_2
+        headline: "Spoilage increases"
+        description: "Handling problems cause more finished goods to be discarded."
+      - id: negative_3
+        headline: "Kitchen equipment fails"
+        description: "Repairs interrupt production and raise operating costs."
+    neutral:
+      - id: neutral_1
+        headline: "Menu review completed"
+        description: "{company} keeps its existing product lineup after a routine review."
+      - id: neutral_2
+        headline: "Pantries audited"
+        description: "Scheduled stock checks leave production forecasts unchanged."
+      - id: neutral_3
+        headline: "Production shifts rotate"
+        description: "Routine staffing changes leave kitchen capacity unchanged."
+    special-positive:
+      - id: special_positive_1
+        headline: "Major catering agreement"
+        description: "A large sustained order could substantially increase revenue at {company}."
+      - id: special_positive_2
+        headline: "Food preservation advance"
+        description: "A new storage method could sharply reduce waste across production."
+    special-negative:
+      - id: special_negative_1
+        headline: "Central kitchen fire"
+        description: "A fictional fire destroys key equipment and interrupts food production."
+      - id: special_negative_2
+        headline: "Widespread product recall"
+        description: "A fictional quality failure forces major stock write-offs and disrupts sales."
+  flowers:
+    positive:
+      - id: positive_1
+        headline: "Healthy blooms expected"
+        description: "Strong plant growth improves the outlook for flower growers."
+      - id: positive_2
+        headline: "Greenhouse efficiency rises"
+        description: "Better climate control reduces growing costs at {company}."
+      - id: positive_3
+        headline: "Florist orders strengthen"
+        description: "A fuller order book supports expected flower sales."
+    negative:
+      - id: negative_1
+        headline: "Delicate blooms damaged"
+        description: "Handling losses reduce the saleable share of the flower crop."
+      - id: negative_2
+        headline: "Heating bills rise"
+        description: "Higher greenhouse heating costs squeeze expected margins."
+      - id: negative_3
+        headline: "Seasonal orders soften"
+        description: "Lower demand leaves some growing capacity unused."
+    neutral:
+      - id: neutral_1
+        headline: "Beds prepared for planting"
+        description: "Routine seasonal preparation leaves the bloom forecast unchanged."
+      - id: neutral_2
+        headline: "Nursery stock counted"
+        description: "Scheduled inventory checks confirm existing expectations."
+      - id: neutral_3
+        headline: "Display varieties reviewed"
+        description: "A routine product review brings no material change to the outlook."
+    special-positive:
+      - id: special_positive_1
+        headline: "Rare bloom cultivated"
+        description: "A successful rare variety could command strong orders for {company}."
+      - id: special_positive_2
+        headline: "Festival supply agreement"
+        description: "A major recurring celebration selects {company} as its floral supplier."
+    special-negative:
+      - id: special_negative_1
+        headline: "Greenhouse complex destroyed"
+        description: "A fictional storm damages growing houses and ruins a large crop."
+      - id: special_negative_2
+        headline: "Nursery-wide fungal outbreak"
+        description: "A fictional disease spreads through growing beds and threatens major losses."
+  gems:
+    positive:
+      - id: positive_1
+        headline: "Gem quality improves"
+        description: "Higher-grade stones improve the expected value of recovered material."
+      - id: positive_2
+        headline: "Cutting yields rise"
+        description: "Careful processing reduces losses at {company}."
+      - id: positive_3
+        headline: "Jeweler demand strengthens"
+        description: "A stronger order book improves the outlook for gem sales."
+    negative:
+      - id: negative_1
+        headline: "Stone defects increase"
+        description: "More flawed material reduces expected saleable output."
+      - id: negative_2
+        headline: "Cutting costs rise"
+        description: "Specialist tool expenses weigh on gem-processing margins."
+      - id: negative_3
+        headline: "Luxury orders soften"
+        description: "A quieter luxury market reduces expected demand for polished stones."
+    neutral:
+      - id: neutral_1
+        headline: "Assay review completed"
+        description: "Routine grading confirms existing quality expectations."
+      - id: neutral_2
+        headline: "Cutters rotate assignments"
+        description: "Scheduled workshop changes leave output forecasts unchanged."
+      - id: neutral_3
+        headline: "Gem inventory catalogued"
+        description: "A routine stock review brings no change to the business outlook."
+    special-positive:
+      - id: special_positive_1
+        headline: "Exceptional gemstone deposit"
+        description: "An unusually rich discovery could greatly increase valuable output at {company}."
+      - id: special_positive_2
+        headline: "Signature stone collection unveiled"
+        description: "A rare collection attracts major orders and strengthens revenue prospects."
+    special-negative:
+      - id: special_negative_1
+        headline: "Gem workings collapse"
+        description: "A fictional cave-in cuts access to the company’s most valuable deposits."
+      - id: special_negative_2
+        headline: "Major vault loss"
+        description: "A fictional security failure causes a substantial inventory write-off."
+  stone:
+    positive:
+      - id: positive_1
+        headline: "Quarry yields improve"
+        description: "Cleaner blocks reduce waste in the quarries of {company}."
+      - id: positive_2
+        headline: "Cutting equipment upgraded"
+        description: "Efficient saws lower stone-processing costs."
+      - id: positive_3
+        headline: "Masonry orders increase"
+        description: "A stronger building order book supports stone demand."
+    negative:
+      - id: negative_1
+        headline: "Fractured rock increases"
+        description: "More unusable material reduces quarry yields."
+      - id: negative_2
+        headline: "Dust-control costs rise"
+        description: "Additional controls increase expected operating expenses."
+      - id: negative_3
+        headline: "Heavy haulage delayed"
+        description: "Transport bottlenecks slow deliveries of finished stone."
+    neutral:
+      - id: neutral_1
+        headline: "Quarry faces surveyed"
+        description: "Routine inspections leave reserve estimates unchanged."
+      - id: neutral_2
+        headline: "Block grades reviewed"
+        description: "Scheduled grading confirms existing quality expectations."
+      - id: neutral_3
+        headline: "Stone yards reorganized"
+        description: "Routine storage changes leave output forecasts unchanged."
+    special-positive:
+      - id: special_positive_1
+        headline: "Large flawless stone reserve found"
+        description: "A major high-quality formation expands profitable quarrying prospects."
+      - id: special_positive_2
+        headline: "Monument supply contract"
+        description: "A large construction commission strengthens long-term demand for {company}."
+    special-negative:
+      - id: special_negative_1
+        headline: "Quarry landslide"
+        description: "A fictional slope failure buries equipment and halts major operations."
+      - id: special_negative_2
+        headline: "Quarry access destroyed"
+        description: "A fictional geological shock cuts off the main extraction area."
+  metals:
+    positive:
+      - id: positive_1
+        headline: "Smelter efficiency improves"
+        description: "Better furnace control reduces fuel use at {company}."
+      - id: positive_2
+        headline: "Metal orders strengthen"
+        description: "Increased demand supports expected processing margins."
+      - id: positive_3
+        headline: "Recovery rates improve"
+        description: "More usable metal is recovered from each batch."
+    negative:
+      - id: negative_1
+        headline: "Fuel bills increase"
+        description: "Higher furnace operating costs weigh on metal margins."
+      - id: negative_2
+        headline: "Impurities reduce yield"
+        description: "More refining is needed to produce saleable metal."
+      - id: negative_3
+        headline: "Furnace maintenance expands"
+        description: "Additional repairs limit expected output at {company}."
+    neutral:
+      - id: neutral_1
+        headline: "Furnace inspection completed"
+        description: "Routine inspections leave capacity forecasts unchanged."
+      - id: neutral_2
+        headline: "Alloy schedules reviewed"
+        description: "Existing production plans remain in place."
+      - id: neutral_3
+        headline: "Metal stores audited"
+        description: "A routine inventory check confirms expected stock levels."
+    special-positive:
+      - id: special_positive_1
+        headline: "Refining breakthrough"
+        description: "A new process could substantially improve metal recovery at {company}."
+      - id: special_positive_2
+        headline: "Major industrial supply agreement"
+        description: "A long-term contract sharply strengthens the metal order book."
+    special-negative:
+      - id: special_negative_1
+        headline: "Smelter accident"
+        description: "A fictional industrial accident disables major refining capacity."
+      - id: special_negative_2
+        headline: "Critical fuel shortage"
+        description: "A fictional supply shock forces widespread furnace shutdowns."
+  woodworking:
+    positive:
+      - id: positive_1
+        headline: "Workshop productivity rises"
+        description: "Improved cutting layouts reduce wood waste at {company}."
+      - id: positive_2
+        headline: "Carpentry orders strengthen"
+        description: "A fuller order book improves expected workshop utilization."
+      - id: positive_3
+        headline: "Drying process improves"
+        description: "Better seasoning reduces rejected finished timber."
+    negative:
+      - id: negative_1
+        headline: "Boards warp in storage"
+        description: "Quality losses reduce the saleable stock of wood products."
+      - id: negative_2
+        headline: "Adhesive costs rise"
+        description: "Higher finishing input costs squeeze workshop margins."
+      - id: negative_3
+        headline: "Saw repairs delay orders"
+        description: "Equipment maintenance slows production at {company}."
+    neutral:
+      - id: neutral_1
+        headline: "Workshop layouts reviewed"
+        description: "A routine planning review leaves capacity unchanged."
+      - id: neutral_2
+        headline: "Board inventory counted"
+        description: "Stock counts confirm existing production expectations."
+      - id: neutral_3
+        headline: "Finishing schedules updated"
+        description: "Routine scheduling changes leave the business outlook unchanged."
+    special-positive:
+      - id: special_positive_1
+        headline: "Mass-production method succeeds"
+        description: "A new process could greatly increase finished wood output."
+      - id: special_positive_2
+        headline: "Major furnishing commission"
+        description: "A large long-term order improves revenue prospects at {company}."
+    special-negative:
+      - id: special_negative_1
+        headline: "Woodworks fire"
+        description: "A fictional fire destroys workshops and finished inventory."
+      - id: special_negative_2
+        headline: "Widespread timber contamination"
+        description: "A fictional stock-quality crisis forces major material write-offs."
+  textiles:
+    positive:
+      - id: positive_1
+        headline: "Loom efficiency improves"
+        description: "Faster reliable weaving reduces production costs."
+      - id: positive_2
+        headline: "Dye consistency improves"
+        description: "Fewer rejected batches support textile margins."
+      - id: positive_3
+        headline: "Clothing orders strengthen"
+        description: "Increased orders improve the outlook for {company}."
+    negative:
+      - id: negative_1
+        headline: "Fiber costs rise"
+        description: "Higher raw-material prices squeeze textile margins."
+      - id: negative_2
+        headline: "Dye batches rejected"
+        description: "Quality problems reduce saleable fabric output."
+      - id: negative_3
+        headline: "Loom downtime increases"
+        description: "Repairs interrupt weaving and delay expected deliveries."
+    neutral:
+      - id: neutral_1
+        headline: "Fabric patterns reviewed"
+        description: "The next collection proceeds without changing production forecasts."
+      - id: neutral_2
+        headline: "Fiber stocks counted"
+        description: "Routine inventory work confirms existing expectations."
+      - id: neutral_3
+        headline: "Weavers change shifts"
+        description: "Scheduled staffing changes leave capacity unchanged."
+    special-positive:
+      - id: special_positive_1
+        headline: "Durable fabric breakthrough"
+        description: "A new weave attracts major orders for {company}."
+      - id: special_positive_2
+        headline: "Uniform supply agreement"
+        description: "A large recurring contract strengthens expected textile revenue."
+    special-negative:
+      - id: special_negative_1
+        headline: "Textile mill fire"
+        description: "A fictional fire destroys looms and a large finished-goods inventory."
+      - id: special_negative_2
+        headline: "Regional fiber failure"
+        description: "A fictional supply collapse threatens major interruptions to weaving."
+  mob_goods:
+    positive:
+      - id: positive_1
+        headline: "Collection routes improve"
+        description: "More efficient gathering reduces costs for {company}."
+      - id: positive_2
+        headline: "Sorting yields improve"
+        description: "Careful processing increases the usable share of collected materials."
+      - id: positive_3
+        headline: "Enchanter orders strengthen"
+        description: "Stronger demand improves the outlook for specialist supplies."
+    negative:
+      - id: negative_1
+        headline: "Collection hazards increase"
+        description: "Difficult routes raise expected gathering costs."
+      - id: negative_2
+        headline: "Material quality weakens"
+        description: "More damaged supplies reduce saleable output."
+      - id: negative_3
+        headline: "Protective equipment costs rise"
+        description: "Higher safety expenses weigh on collection margins."
+    neutral:
+      - id: neutral_1
+        headline: "Supply stores inspected"
+        description: "Routine checks confirm expected material quality."
+      - id: neutral_2
+        headline: "Collection shifts rotate"
+        description: "A normal crew rotation leaves forecasts unchanged."
+      - id: neutral_3
+        headline: "Route maps reviewed"
+        description: "Scheduled planning retains the existing gathering routes."
+    special-positive:
+      - id: special_positive_1
+        headline: "Rich collection grounds mapped"
+        description: "New routes could substantially increase specialist material output."
+      - id: special_positive_2
+        headline: "Major alchemical supply contract"
+        description: "A large sustained order strengthens the outlook for {company}."
+    special-negative:
+      - id: special_negative_1
+        headline: "Collection outposts overrun"
+        description: "A fictional disaster destroys outposts and interrupts supply gathering."
+      - id: special_negative_2
+        headline: "Storage contamination crisis"
+        description: "A fictional handling failure forces large specialist-material write-offs."
+  redstone:
+    positive:
+      - id: positive_1
+        headline: "Circuit yields improve"
+        description: "Fewer assembly defects support redstone workshop margins."
+      - id: positive_2
+        headline: "Automation orders increase"
+        description: "A stronger order book improves expected circuit sales."
+      - id: positive_3
+        headline: "Component sourcing improves"
+        description: "Reliable parts deliveries reduce production interruptions."
+    negative:
+      - id: negative_1
+        headline: "Component shortages"
+        description: "Missing parts delay assembly at {company}."
+      - id: negative_2
+        headline: "Calibration failures increase"
+        description: "More rework raises production costs."
+      - id: negative_3
+        headline: "Engineering costs rise"
+        description: "Specialist labor expenses weigh on expected margins."
+    neutral:
+      - id: neutral_1
+        headline: "Circuit standards reviewed"
+        description: "Routine design checks leave the product outlook unchanged."
+      - id: neutral_2
+        headline: "Test benches inspected"
+        description: "Scheduled maintenance confirms existing workshop capacity."
+      - id: neutral_3
+        headline: "Component inventory audited"
+        description: "Stock counts produce no material change to forecasts."
+    special-positive:
+      - id: special_positive_1
+        headline: "Automation breakthrough"
+        description: "A successful design could sharply increase demand for the systems of {company}."
+      - id: special_positive_2
+        headline: "Major infrastructure commission"
+        description: "A large recurring installation contract strengthens revenue prospects."
+    special-negative:
+      - id: special_negative_1
+        headline: "Workshop chain failure"
+        description: "A fictional testing accident destroys key equipment and finished circuits."
+      - id: special_negative_2
+        headline: "Critical design recall"
+        description: "A fictional engineering defect forces extensive rework and stock losses."
+  construction:
+    positive:
+      - id: positive_1
+        headline: "Material waste falls"
+        description: "Better site planning improves expected construction margins."
+      - id: positive_2
+        headline: "Building orders strengthen"
+        description: "New commissions improve the order outlook for {company}."
+      - id: positive_3
+        headline: "Assembly methods improve"
+        description: "Efficient techniques reduce time spent on each project."
+    negative:
+      - id: negative_1
+        headline: "Site delays increase"
+        description: "Scheduling problems raise expected project costs."
+      - id: negative_2
+        headline: "Material prices climb"
+        description: "Higher input expenses squeeze building margins."
+      - id: negative_3
+        headline: "Rework costs mount"
+        description: "Quality corrections consume capacity at {company}."
+    neutral:
+      - id: neutral_1
+        headline: "Project milestones reviewed"
+        description: "Routine reviews leave completion forecasts unchanged."
+      - id: neutral_2
+        headline: "Building stores audited"
+        description: "Scheduled counts confirm expected material availability."
+      - id: neutral_3
+        headline: "Site teams rotate"
+        description: "Normal crew changes leave project capacity unchanged."
+    special-positive:
+      - id: special_positive_1
+        headline: "Major civic development awarded"
+        description: "A large building program sharply strengthens the order book."
+      - id: special_positive_2
+        headline: "Construction method breakthrough"
+        description: "A successful technique could substantially reduce project costs."
+    special-negative:
+      - id: special_negative_1
+        headline: "Major structural failure"
+        description: "A fictional project collapse causes costly repairs and interrupts construction."
+      - id: special_negative_2
+        headline: "Supply depot devastated"
+        description: "A fictional disaster destroys stored materials and delays major projects."
+  exploration:
+    positive:
+      - id: positive_1
+        headline: "Survey results improve"
+        description: "Promising findings strengthen expedition prospects for {company}."
+      - id: positive_2
+        headline: "Travel routes shortened"
+        description: "More efficient routes reduce expedition costs."
+      - id: positive_3
+        headline: "Recovered artifacts gain interest"
+        description: "Stronger collector demand improves the outlook for recovered goods."
+    negative:
+      - id: negative_1
+        headline: "Expeditions run late"
+        description: "Difficult journeys raise expected exploration expenses."
+      - id: negative_2
+        headline: "Finds disappoint"
+        description: "Lower-quality discoveries reduce expected recovery value."
+      - id: negative_3
+        headline: "Equipment losses increase"
+        description: "Replacing damaged expedition gear weighs on margins."
+    neutral:
+      - id: neutral_1
+        headline: "Expedition maps updated"
+        description: "Routine cartography leaves exploration forecasts unchanged."
+      - id: neutral_2
+        headline: "Survey teams rotate"
+        description: "Scheduled crew changes leave expedition plans unchanged."
+      - id: neutral_3
+        headline: "Recovered goods catalogued"
+        description: "A routine inventory review confirms existing expectations."
+    special-positive:
+      - id: special_positive_1
+        headline: "Extraordinary ruins discovered"
+        description: "A major fictional discovery promises valuable recoveries for {company}."
+      - id: special_positive_2
+        headline: "Historic expedition succeeds"
+        description: "A remarkably productive journey strengthens expected exploration revenue."
+    special-negative:
+      - id: special_negative_1
+        headline: "Expedition fleet lost"
+        description: "A fictional disaster destroys equipment and ends several major expeditions."
+      - id: special_negative_2
+        headline: "Remote base destroyed"
+        description: "A fictional catastrophe cuts access to the company’s key exploration area."

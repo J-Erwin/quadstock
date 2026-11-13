@@ -1,0 +1,15 @@
+# Native Tab footer. Existing config.yml and administrator industry icons are unchanged.
+enabled: true
+# Wall-clock cadence; committed trades refresh on the next server tick.
+refresh-seconds: 1
+rows-per-page: 6
+page-seconds: 8
+resource-pack:
+  # Optional administrator-supplied pack; no artwork or ZIP is bundled.
+  # Blank URL keeps the live text overlay, without custom glyphs or prompts.
+  url: ""
+  # Set the hosted pack's SHA-1 explicitly. Blank keeps text-only mode.
+  sha1: ""
+# Optional icon-materials: [CHEST, WHEAT, ...] for a customized pack.
+# Each material needs quadstock:icons/<lowercase material> font, glyph U+E000.
+# When omitted, the legacy default material list is used. Unlisted materials show text only.

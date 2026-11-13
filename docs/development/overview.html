@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html lang="en"><head><title>QuadStock developer reference</title></head><body>
+<h1>QuadStock implementation reference</h1>
+<p>This searchable Java reference documents the Paper plugin's implementation contracts.
+It is not a public HTTP API or a supported third-party Java SDK.</p>
+<h2>Architecture</h2>
+<p>QuadStockPlugin delegates lifecycle to MarketRuntime. Commands use MarketCommands.
+Ticker-scoped models and trading desks share one calendar, SQLite database and economy gateway.
+MarketMenus owns inventory lifecycle; focused screen classes render trading, charts, portfolios and reports.</p>
+<h2>Critical contracts</h2>
+<p>Application mutations and Vault calls run on the Paper server thread. QuickShop callbacks
+queue scalar observations. Market time is independent of daylight. Only committed journal
+operations change holdings. Uncertain payments are reconciled without repeating provider calls.</p>
+<h2>Persistence</h2>
+<p>SQLite stores normalized payment intents/transitions and named application checkpoints.
+A failed journal write blocks further settlement. Startup replays the journal once; a payment
+transition appends rows rather than rewriting all history. Database transactions cannot make
+an external economy-provider call atomic.</p>
+<p>See docs/development/README.md in the repository for build instructions, architecture,
+remaining performance limits and the manual validation checklist.</p>
+</body></html>

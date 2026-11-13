@@ -1,0 +1,849 @@
+# QuadStock
+# Edit while stopped, then restart.
+# /qm config check validates without applying.
+# Admin guide: docs/admin-guide.md
+# Market/ticker IDs are permanent once saved.
+version: 1
+# Optional command default; omit to use the first configured industry.
+default-ticker: AGRI
+# Physical market display anchors. An empty list disables new registrations.
+# Existing admin files may omit this section and use these defaults.
+# Registered blocks use right-click for their market screen, including containers if allowed.
+displays:
+  max-displays: 256
+  view-distance: 32
+  allowed-anchor-materials:
+    - STONE
+    - STONE_BRICKS
+    - POLISHED_ANDESITE
+    - DEEPSLATE_BRICKS
+    - QUARTZ_BLOCK
+    - SMOOTH_QUARTZ
+    - BRICKS
+    - OAK_PLANKS
+    - SPRUCE_PLANKS
+    - DARK_OAK_PLANKS
+    - IRON_BLOCK
+    - GOLD_BLOCK
+    - COPPER_BLOCK
+    - OAK_SIGN
+    - OAK_WALL_SIGN
+    - OAK_HANGING_SIGN
+    - OAK_WALL_HANGING_SIGN
+    - SPRUCE_SIGN
+    - SPRUCE_WALL_SIGN
+    - SPRUCE_HANGING_SIGN
+    - SPRUCE_WALL_HANGING_SIGN
+# Rolling price history in market months (28 market days each); supported range: 1–12.
+# Increasing preserves existing history; lowering prunes older samples when applied.
+# Existing files that omit this section use 12 months without being rewritten.
+history:
+  retention-market-months: 12
+ui:
+  refresh-seconds: 2
+trading:
+  enabled: true
+  quote-market-minutes: 60
+  max-shares-per-order: 10000
+reports:
+  enabled: true
+  interval-market-hours: 24
+  alert-cooldown-market-hours: 2
+  news-headline-limit: 4
+commerce:
+  enabled: true
+# 0 disables influence.
+# 1 applies the full max-outlook-percent cap below.
+  influence-scale: 1.0
+# Maximum positive reference-outlook adjustment, NOT an immediate price increase (0–100%).
+  max-outlook-percent: 2.0
+# All four requirements must be met within the trailing market day, after learning.
+  minimum-buyers: 3
+  minimum-sellers: 2
+  minimum-participants: 4
+  minimum-pairs: 3
+# Global economic event defaults; industries may override any key under their own events section.
+# Volatility remains a random-noise multiplier, separate from these percentages.
+events:
+  max-move-percent-per-market-hour: 0.5
+  positive-weight: 4
+  negative-weight: 4
+  neutral-weight: 2
+  positive-impact-min-percent: 8
+  positive-impact-max-percent: 12
+  negative-impact-min-percent: 8
+  negative-impact-max-percent: 12
+  duration-min-market-hours: 18
+  duration-max-market-hours: 36
+  gap-min-market-hours: 12
+  gap-max-market-hours: 36
+  special:
+    enabled: true
+    chance-percent: 1
+    positive-weight: 1
+    negative-weight: 1
+    positive-impact-min-percent: 20
+    positive-impact-max-percent: 40
+    negative-impact-min-percent: 20
+    negative-impact-max-percent: 40
+    duration-min-market-hours: 12
+    duration-max-market-hours: 36
+    cooldown-market-days: 14
+    response-half-life-market-hours: 3
+    max-move-percent-per-market-hour: 2
+markets:
+  OVERWORLD:
+    name: Overworld Exchange
+# Optional per-industry share-supply and max-shares-per-player:
+# unlimited (default), or a whole number >= 0. Zero blocks new purchases.
+# Example: share-supply: 100000 and max-shares-per-player: 1000.
+# Completed sales return shares to supply. Existing holdings are never removed.
+industries:
+# ========================================
+# AGRICULTURE
+# Creeper Creek Farms
+# ========================================
+  AGRI:
+    market: OVERWORLD
+    story-collection: farming
+    name: Creeper Creek Farms
+    icon: WHEAT
+    items: [
+      WHEAT,
+      WHEAT_SEEDS,
+      CARROT,
+      POTATO,
+      POISONOUS_POTATO,
+      BEETROOT,
+      BEETROOT_SEEDS,
+      PUMPKIN,
+      PUMPKIN_SEEDS,
+      MELON,
+      MELON_SLICE,
+      MELON_SEEDS,
+      COCOA_BEANS,
+      SUGAR_CANE,
+      CACTUS,
+        SWEET_BERRIES,
+      GLOW_BERRIES,
+      TORCHFLOWER_SEEDS,
+      PITCHER_POD,
+      RED_MUSHROOM,
+      BROWN_MUSHROOM,
+      APPLE
+    ]
+    reference-price: 35
+    volatility: 0.65
+    events-enabled: true
+    tradable: true
+    share-supply: unlimited
+    max-shares-per-player: unlimited
+    daily-payout-limit: inherit
+# ========================================
+# MINING
+# Bedrock Mining Co.
+# ========================================
+  MINE:
+    market: OVERWORLD
+    story-collection: mining
+    name: Bedrock Mining Co.
+    icon: RAW_IRON
+    items: [
+      COAL,
+      CHARCOAL,
+      RAW_IRON,
+      RAW_COPPER,
+      RAW_GOLD,
+      COAL_ORE,
+      DEEPSLATE_COAL_ORE,
+      IRON_ORE,
+      DEEPSLATE_IRON_ORE,
+      COPPER_ORE,
+      DEEPSLATE_COPPER_ORE,
+      GOLD_ORE,
+      DEEPSLATE_GOLD_ORE,
+      TUFF,
+      CALCITE,
+      DRIPSTONE_BLOCK,
+      POINTED_DRIPSTONE,
+      FLINT,
+      CLAY_BALL,
+      GRAVEL,
+      SAND,
+      RED_SAND
+    ]
+    reference-price: 175
+    volatility: 1.10
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# FORESTRY
+# Chop Chop Timber Co.
+# ========================================
+  TIMB:
+    market: OVERWORLD
+    story-collection: forestry
+    name: Chop Chop Timber Co.
+    icon: OAK_LOG
+    items: [
+      OAK_LOG,
+      SPRUCE_LOG,
+      BIRCH_LOG,
+      JUNGLE_LOG,
+      ACACIA_LOG,
+      DARK_OAK_LOG,
+      MANGROVE_LOG,
+      CHERRY_LOG,
+      PALE_OAK_LOG,
+      OAK_WOOD,
+      SPRUCE_WOOD,
+      BIRCH_WOOD,
+      JUNGLE_WOOD,
+      ACACIA_WOOD,
+      DARK_OAK_WOOD,
+      MANGROVE_WOOD,
+      CHERRY_WOOD,
+      PALE_OAK_WOOD,
+      OAK_SAPLING,
+      SPRUCE_SAPLING,
+      BIRCH_SAPLING,
+      JUNGLE_SAPLING,
+      ACACIA_SAPLING,
+      DARK_OAK_SAPLING,
+      CHERRY_SAPLING,
+      PALE_OAK_SAPLING,
+      MANGROVE_PROPAGULE,
+      STICK
+    ]
+    reference-price: 45
+    volatility: 0.60
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# FISHING
+# Hook, Line & Sinker
+# ========================================
+  FISH:
+    market: OVERWORLD
+    story-collection: fishing
+    name: Hook, Line & Sinker
+    icon: COD
+    items: [
+      COD,
+      SALMON,
+      TROPICAL_FISH,
+      PUFFERFISH,
+      COOKED_COD,
+      COOKED_SALMON,
+      INK_SAC,
+      GLOW_INK_SAC,
+      NAUTILUS_SHELL,
+      PRISMARINE_SHARD,
+      PRISMARINE_CRYSTALS,
+      KELP,
+      DRIED_KELP,
+      DRIED_KELP_BLOCK,
+      SEAGRASS,
+      SEA_PICKLE,
+      TUBE_CORAL,
+      BRAIN_CORAL,
+      BUBBLE_CORAL,
+      FIRE_CORAL,
+      HORN_CORAL
+    ]
+    reference-price: 65
+    volatility: 1.15
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# LIVESTOCK
+# Moo & Co. Ranching
+# ========================================
+  LIVE:
+    market: OVERWORLD
+    story-collection: livestock
+    name: Moo & Co. Ranching
+    icon: LEATHER
+    items: [
+      EGG,
+      CHICKEN,
+      BEEF,
+      PORKCHOP,
+      MUTTON,
+      RABBIT,
+      LEATHER,
+      RABBIT_HIDE,
+      RABBIT_FOOT,
+      FEATHER,
+      MILK_BUCKET,
+      HONEY_BOTTLE,
+      HONEYCOMB,
+      TURTLE_SCUTE,
+      ARMADILLO_SCUTE,
+      GOAT_HORN
+    ]
+    reference-price: 90
+    volatility: 0.75
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# FOOD PRODUCTION
+# The Golden Carrot Kitchen
+# ========================================
+  FOOD:
+    market: OVERWORLD
+    story-collection: food
+    name: The Golden Carrot Kitchen
+    icon: BREAD
+    items: [
+      BREAD,
+      BAKED_POTATO,
+      BEETROOT_SOUP,
+      PUMPKIN_PIE,
+      COOKIE,
+      CAKE,
+      SUGAR,
+      MUSHROOM_STEW,
+      RABBIT_STEW,
+      SUSPICIOUS_STEW,
+      COOKED_BEEF,
+      COOKED_PORKCHOP,
+      COOKED_CHICKEN,
+      COOKED_MUTTON,
+      COOKED_RABBIT,
+      GOLDEN_CARROT,
+      GOLDEN_APPLE,
+      GLISTERING_MELON_SLICE
+    ]
+    reference-price: 55
+    volatility: 0.55
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# HORTICULTURE
+# Bloom & Gloom Botanicals
+# ========================================
+  FLOR:
+    market: OVERWORLD
+    story-collection: flowers
+    name: Bloom & Gloom Botanicals
+    icon: POPPY
+    items: [
+      DANDELION,
+      POPPY,
+      CACTUS_FLOWER,
+      BLUE_ORCHID,
+      ALLIUM,
+      AZURE_BLUET,
+      RED_TULIP,
+      ORANGE_TULIP,
+      WHITE_TULIP,
+      PINK_TULIP,
+      OXEYE_DAISY,
+      CORNFLOWER,
+      LILY_OF_THE_VALLEY,
+      SUNFLOWER,
+      LILAC,
+      ROSE_BUSH,
+      PEONY,
+      TORCHFLOWER,
+      PITCHER_PLANT,
+      OPEN_EYEBLOSSOM,
+      CLOSED_EYEBLOSSOM,
+      PINK_PETALS,
+      WILDFLOWERS,
+      LEAF_LITTER,
+      SHORT_GRASS,
+      TALL_GRASS,
+      FERN,
+      LARGE_FERN,
+      DEAD_BUSH,
+      BUSH,
+      FIREFLY_BUSH,
+      VINE,
+      LILY_PAD,
+      BIG_DRIPLEAF,
+      SMALL_DRIPLEAF,
+      HANGING_ROOTS,
+      MOSS_BLOCK,
+      MOSS_CARPET,
+      PALE_MOSS_BLOCK,
+      PALE_MOSS_CARPET,
+      PALE_HANGING_MOSS,
+      SPORE_BLOSSOM,
+      AZALEA,
+      FLOWERING_AZALEA,
+      AZALEA_LEAVES,
+      FLOWERING_AZALEA_LEAVES,
+      BAMBOO
+    ]
+    reference-price: 75
+    volatility: 1.30
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# GEMS & PRECIOUS MATERIALS
+# Diamond Hands Jewelers
+# ========================================
+  GEMS:
+    market: OVERWORLD
+    story-collection: gems
+    name: Diamond Hands Jewelers
+    icon: DIAMOND
+    items: [
+      DIAMOND,
+      EMERALD,
+      LAPIS_LAZULI,
+      AMETHYST_SHARD,
+      DIAMOND_ORE,
+      DEEPSLATE_DIAMOND_ORE,
+      EMERALD_ORE,
+      DEEPSLATE_EMERALD_ORE,
+      LAPIS_ORE,
+      DEEPSLATE_LAPIS_ORE,
+      AMETHYST_BLOCK,
+      SMALL_AMETHYST_BUD,
+      MEDIUM_AMETHYST_BUD,
+      LARGE_AMETHYST_BUD,
+      AMETHYST_CLUSTER,
+      DIAMOND_BLOCK,
+      EMERALD_BLOCK,
+      LAPIS_BLOCK
+    ]
+    reference-price: 1250
+    volatility: 2.50
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# STONE & MASONRY
+# Hard Rock Masonry
+# ========================================
+  STON:
+    market: OVERWORLD
+    story-collection: stone
+    name: Hard Rock Masonry
+    icon: STONE
+    items: [
+      STONE,
+      COBBLESTONE,
+      MOSSY_COBBLESTONE,
+      STONE_BRICKS,
+      MOSSY_STONE_BRICKS,
+      CRACKED_STONE_BRICKS,
+      CHISELED_STONE_BRICKS,
+      SMOOTH_STONE,
+      ANDESITE,
+      POLISHED_ANDESITE,
+      DIORITE,
+      POLISHED_DIORITE,
+      GRANITE,
+      POLISHED_GRANITE,
+      DEEPSLATE,
+      COBBLED_DEEPSLATE,
+      POLISHED_DEEPSLATE,
+      DEEPSLATE_BRICKS,
+      DEEPSLATE_TILES,
+      CRACKED_DEEPSLATE_BRICKS,
+      CRACKED_DEEPSLATE_TILES,
+      CHISELED_DEEPSLATE,
+      TUFF_BRICKS,
+      POLISHED_TUFF,
+      CHISELED_TUFF,
+      CHISELED_TUFF_BRICKS,
+      BRICKS,
+      BRICK,
+      MUD_BRICKS,
+      PACKED_MUD,
+      MUD,
+      CLAY,
+      TERRACOTTA
+    ]
+    reference-price: 25
+    volatility: 0.50
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# METALLURGY
+# Iron Will Foundries
+# ========================================
+  META:
+    market: OVERWORLD
+    story-collection: metals
+    name: Iron Will Foundries
+    icon: IRON_INGOT
+    items: [
+      IRON_INGOT,
+      IRON_NUGGET,
+      IRON_BLOCK,
+      COPPER_INGOT,
+      COPPER_NUGGET,
+      COPPER_BLOCK,
+      GOLD_INGOT,
+      GOLD_NUGGET,
+      GOLD_BLOCK,
+      RAW_IRON_BLOCK,
+      RAW_COPPER_BLOCK,
+      RAW_GOLD_BLOCK,
+      IRON_BARS,
+      IRON_DOOR,
+      IRON_TRAPDOOR,
+      ANVIL,
+      CHIPPED_ANVIL,
+      DAMAGED_ANVIL,
+      HEAVY_WEIGHTED_PRESSURE_PLATE,
+      LIGHT_WEIGHTED_PRESSURE_PLATE,
+      LIGHTNING_ROD,
+      CUT_COPPER,
+      COPPER_BARS,
+      COPPER_CHAIN,
+      COPPER_LANTERN,
+      COPPER_TORCH,
+      COPPER_CHEST,
+      COPPER_DOOR,
+      COPPER_TRAPDOOR
+    ]
+    reference-price: 325
+    volatility: 1.20
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# WOOD PRODUCTS
+# Plank You Very Much
+# ========================================
+  WOOD:
+    market: OVERWORLD
+    story-collection: woodworking
+    name: Plank You Very Much
+    icon: OAK_PLANKS
+    items: [
+      OAK_PLANKS,
+      SPRUCE_PLANKS,
+      BIRCH_PLANKS,
+      JUNGLE_PLANKS,
+      ACACIA_PLANKS,
+      DARK_OAK_PLANKS,
+      MANGROVE_PLANKS,
+      CHERRY_PLANKS,
+      PALE_OAK_PLANKS,
+      BAMBOO_PLANKS,
+      BAMBOO_MOSAIC,
+      OAK_DOOR,
+      SPRUCE_DOOR,
+      BIRCH_DOOR,
+      JUNGLE_DOOR,
+      ACACIA_DOOR,
+      DARK_OAK_DOOR,
+      MANGROVE_DOOR,
+      CHERRY_DOOR,
+      PALE_OAK_DOOR,
+      OAK_TRAPDOOR,
+      SPRUCE_TRAPDOOR,
+      BIRCH_TRAPDOOR,
+      JUNGLE_TRAPDOOR,
+      ACACIA_TRAPDOOR,
+      DARK_OAK_TRAPDOOR,
+      MANGROVE_TRAPDOOR,
+      CHERRY_TRAPDOOR,
+      PALE_OAK_TRAPDOOR,
+      CHEST,
+      BARREL,
+      CRAFTING_TABLE,
+      LADDER,
+      SCAFFOLDING,
+      BOOKSHELF,
+      CHISELED_BOOKSHELF,
+      LECTERN,
+      COMPOSTER,
+      FLETCHING_TABLE,
+      CARTOGRAPHY_TABLE,
+      LOOM,
+      PAPER,
+      BOOK
+    ]
+    reference-price: 60
+    volatility: 0.65
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# TEXTILES & DYES
+# Wool Street Textiles
+# ========================================
+  TEXT:
+    market: OVERWORLD
+    story-collection: textiles
+    name: Wool Street Textiles
+    icon: WHITE_WOOL
+    items: [
+      STRING,
+      WHITE_WOOL,
+      ORANGE_WOOL,
+      MAGENTA_WOOL,
+      LIGHT_BLUE_WOOL,
+      YELLOW_WOOL,
+      LIME_WOOL,
+      PINK_WOOL,
+      GRAY_WOOL,
+      LIGHT_GRAY_WOOL,
+      CYAN_WOOL,
+      PURPLE_WOOL,
+      BLUE_WOOL,
+      BROWN_WOOL,
+      GREEN_WOOL,
+      RED_WOOL,
+      BLACK_WOOL,
+      WHITE_DYE,
+      ORANGE_DYE,
+      MAGENTA_DYE,
+      LIGHT_BLUE_DYE,
+      YELLOW_DYE,
+      LIME_DYE,
+      PINK_DYE,
+      GRAY_DYE,
+      LIGHT_GRAY_DYE,
+      CYAN_DYE,
+      PURPLE_DYE,
+      BLUE_DYE,
+      BROWN_DYE,
+      GREEN_DYE,
+      RED_DYE,
+      BLACK_DYE,
+      WHITE_CARPET,
+      RED_CARPET,
+      BLUE_CARPET,
+      BLACK_CARPET,
+      LEATHER_HELMET,
+      LEATHER_CHESTPLATE,
+      LEATHER_LEGGINGS,
+      LEATHER_BOOTS,
+      ITEM_FRAME,
+      GLOW_ITEM_FRAME,
+      PAINTING
+    ]
+    reference-price: 85
+    volatility: 0.85
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# MOB RESOURCES
+# Rotten Returns Inc.
+# ========================================
+  MOBS:
+    market: OVERWORLD
+    story-collection: mob_goods
+    name: Rotten Returns Inc.
+    icon: BONE
+    items: [
+      BONE,
+      BONE_MEAL,
+      BONE_BLOCK,
+      ROTTEN_FLESH,
+      SPIDER_EYE,
+      FERMENTED_SPIDER_EYE,
+      GUNPOWDER,
+      SLIME_BALL,
+      SLIME_BLOCK,
+      ENDER_PEARL,
+      PHANTOM_MEMBRANE,
+      ARROW,
+      WIND_CHARGE,
+      BREEZE_ROD,
+      HEAVY_CORE,
+      OMINOUS_BOTTLE,
+      TRIAL_KEY,
+      OMINOUS_TRIAL_KEY,
+      RESIN_CLUMP,
+      RESIN_BRICK,
+      RESIN_BLOCK,
+      CREAKING_HEART
+    ]
+    reference-price: 225
+    volatility: 1.80
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# REDSTONE TECHNOLOGY
+# Redstone Innovations
+# ========================================
+  REDT:
+    market: OVERWORLD
+    story-collection: redstone
+    name: Redstone Innovations
+    icon: REDSTONE
+    items: [
+      REDSTONE,
+      REDSTONE_ORE,
+      DEEPSLATE_REDSTONE_ORE,
+      REDSTONE_BLOCK,
+      REDSTONE_TORCH,
+      REDSTONE_LAMP,
+      REPEATER,
+      COMPARATOR,
+      OBSERVER,
+      PISTON,
+      STICKY_PISTON,
+      DISPENSER,
+      DROPPER,
+      HOPPER,
+      TARGET,
+      LEVER,
+      TRIPWIRE_HOOK,
+      DAYLIGHT_DETECTOR,
+      NOTE_BLOCK,
+      JUKEBOX,
+      SCULK_SENSOR,
+      CALIBRATED_SCULK_SENSOR,
+      SCULK_SHRIEKER,
+      SCULK_CATALYST,
+      SCULK,
+      SCULK_VEIN,
+      CRAFTER,
+      RAIL,
+      POWERED_RAIL,
+      DETECTOR_RAIL,
+      ACTIVATOR_RAIL
+    ]
+    reference-price: 750
+    volatility: 1.65
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# CONSTRUCTION MATERIALS
+# Block by Block Construction
+# ========================================
+  BUIL:
+    market: OVERWORLD
+    story-collection: construction
+    name: Block by Block Construction
+    icon: GLASS
+    items: [
+      GLASS,
+      GLASS_PANE,
+      TINTED_GLASS,
+      WHITE_STAINED_GLASS,
+      ORANGE_STAINED_GLASS,
+      MAGENTA_STAINED_GLASS,
+      LIGHT_BLUE_STAINED_GLASS,
+      YELLOW_STAINED_GLASS,
+      LIME_STAINED_GLASS,
+      PINK_STAINED_GLASS,
+      GRAY_STAINED_GLASS,
+      LIGHT_GRAY_STAINED_GLASS,
+      CYAN_STAINED_GLASS,
+      PURPLE_STAINED_GLASS,
+      BLUE_STAINED_GLASS,
+      BROWN_STAINED_GLASS,
+      GREEN_STAINED_GLASS,
+      RED_STAINED_GLASS,
+      BLACK_STAINED_GLASS,
+      WHITE_CONCRETE,
+      ORANGE_CONCRETE,
+      MAGENTA_CONCRETE,
+      LIGHT_BLUE_CONCRETE,
+      YELLOW_CONCRETE,
+      LIME_CONCRETE,
+      PINK_CONCRETE,
+      GRAY_CONCRETE,
+      LIGHT_GRAY_CONCRETE,
+      CYAN_CONCRETE,
+      PURPLE_CONCRETE,
+      BLUE_CONCRETE,
+      BROWN_CONCRETE,
+      GREEN_CONCRETE,
+      RED_CONCRETE,
+      BLACK_CONCRETE,
+      WHITE_TERRACOTTA,
+      ORANGE_TERRACOTTA,
+      MAGENTA_TERRACOTTA,
+      LIGHT_BLUE_TERRACOTTA,
+      YELLOW_TERRACOTTA,
+      LIME_TERRACOTTA,
+      PINK_TERRACOTTA,
+      GRAY_TERRACOTTA,
+      LIGHT_GRAY_TERRACOTTA,
+      CYAN_TERRACOTTA,
+      PURPLE_TERRACOTTA,
+      BLUE_TERRACOTTA,
+      BROWN_TERRACOTTA,
+      GREEN_TERRACOTTA,
+      RED_TERRACOTTA,
+      BLACK_TERRACOTTA,
+      OBSIDIAN,
+      CRYING_OBSIDIAN,
+      ICE,
+      PACKED_ICE,
+      BLUE_ICE,
+      SNOW_BLOCK,
+      SNOWBALL,
+      LANTERN
+    ]
+    reference-price: 150
+    volatility: 0.80
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
+# ========================================
+# EXPLORATION & ARTIFACTS
+# Lost & Found Expeditions
+# ========================================
+  EXPL:
+    market: OVERWORLD
+    story-collection: exploration
+    name: Lost & Found Expeditions
+    icon: HEART_OF_THE_SEA
+    items: [
+      HEART_OF_THE_SEA,
+      ECHO_SHARD,
+      DISC_FRAGMENT_5,
+      RECOVERY_COMPASS,
+      COMPASS,
+      CLOCK,
+      MAP,
+      FILLED_MAP,
+      NAME_TAG,
+      SADDLE,
+      LEAD,
+      BUNDLE,
+      SPYGLASS,
+      BRUSH,
+      ANGLER_POTTERY_SHERD,
+      ARCHER_POTTERY_SHERD,
+      ARMS_UP_POTTERY_SHERD,
+      BLADE_POTTERY_SHERD,
+      BREWER_POTTERY_SHERD,
+      BURN_POTTERY_SHERD,
+      DANGER_POTTERY_SHERD,
+      EXPLORER_POTTERY_SHERD,
+      FLOW_POTTERY_SHERD,
+      FRIEND_POTTERY_SHERD,
+      GUSTER_POTTERY_SHERD,
+      HEART_POTTERY_SHERD,
+      HEARTBREAK_POTTERY_SHERD,
+      HOWL_POTTERY_SHERD,
+      MINER_POTTERY_SHERD,
+      MOURNER_POTTERY_SHERD,
+      PLENTY_POTTERY_SHERD,
+      PRIZE_POTTERY_SHERD,
+      SCRAPE_POTTERY_SHERD,
+      SHEAF_POTTERY_SHERD,
+      SHELTER_POTTERY_SHERD,
+      SKULL_POTTERY_SHERD,
+      SNORT_POTTERY_SHERD
+    ]
+    reference-price: 2000
+    volatility: 2.30
+    events-enabled: true
+    tradable: true
+    daily-payout-limit: 5000
