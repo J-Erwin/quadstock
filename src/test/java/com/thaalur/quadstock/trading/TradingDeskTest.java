@@ -336,7 +336,7 @@ public class TradingDeskTest {
       reserve.save(dir);
       desk.activate(reserve);
       assertEquals(0, new BigDecimal("100").compareTo(ledger.reserve("OVERWORLD")));
-      assertEquals(0, new BigDecimal("50").compareTo(desk.remaining(4)));
+      assertEquals(0, BigDecimal.ZERO.compareTo(desk.remaining(4).orElseThrow()));
       assertEquals(5, desk.position(player).shares());
       assertEquals(UNLIMITED_LIQUIDITY, ledger.entries().getFirst().intent().mode());
     }
@@ -348,14 +348,114 @@ public class TradingDeskTest {
       assertEquals(5, desk.position(player).shares());
       assertEquals(0, new BigDecimal("500").compareTo(desk.position(player).cost()));
       assertEquals(0, new BigDecimal("400").compareTo(desk.position(player).realized()));
-      assertEquals(0, new BigDecimal("50").compareTo(desk.remaining(5)));
-      var raised = policy(RESERVE_BACKED, "200");
+      assertEquals(0, BigDecimal.ZERO.compareTo(desk.remaining(5).orElseThrow()));
+      var raised = policy(RESERVE_BACKED, "700");
       desk.validatePolicy(raised);
       raised.save(dir);
       desk.activate(raised);
       trade(desk, Side.SELL, 1, 100, 5);
       assertEquals(0, ledger.reserve("OVERWORLD").signum());
-      assertEquals(0, desk.remaining(5).signum());
+      assertEquals(0, desk.remaining(5).orElseThrow().signum());
+    }
+  }
+
+  @Test
+  public void dailyAllowanceIsSharedAcrossPlayersButIsolatedByTickerInBothModes() throws Exception {
+    for (var mode : TradePreview.SettlementMode.values()) {
+      Path dir = Files.createTempDirectory("shared-payout");
+      var wallet = new Wallet();
+      var policy = policy(mode, "1000");
+      UUID other = UUID.randomUUID();
+      try (var ledger = HoldingsLedger.open(dir)) {
+        var desk = new TradingDesk(ledger, wallet, policy, "CUSTOM", "EXCHANGE");
+        desk.configure("CUSTOM", "EXCHANGE", new BigDecimal("250"), 1000, 10000, true);
+        var peer = new TradingDesk(ledger, wallet, policy, "OTHER", "EXCHANGE");
+        trade(desk, Side.BUY, 10, 100, 0);
+        var buy = desk.quote(other, Side.BUY, 10, 100, 0);
+        desk.confirm(other, buy.id(), 0);
+        var stale = desk.quote(other, Side.SELL, 10, 100, 1);
+        var offer = desk.quote(player, Side.SELL, 10, 100, 1);
+        assertEquals(2, offer.offered());
+        assertEquals(2, wallet.calls);
+        desk.confirm(player, offer.id(), 1);
+        assertEquals(8, desk.position(player).shares());
+        assertThrows(IllegalStateException.class, () -> desk.confirm(other, stale.id(), 1));
+        assertEquals(3, wallet.calls);
+        assertEquals(0, new BigDecimal("50").compareTo(desk.remaining(1).orElseThrow()));
+        assertEquals(0, new BigDecimal("1000").compareTo(peer.remaining(1).orElseThrow()));
+        var finalOffer = desk.quote(other, Side.SELL, 10, 50, 2);
+        assertEquals(1, finalOffer.offered());
+        desk.confirm(other, finalOffer.id(), 2);
+        trade(desk, Side.BUY, 1, 100, 3);
+        int calls = wallet.calls;
+        assertThrows(IllegalArgumentException.class, () -> desk.quote(player, Side.SELL, 1, 1, 3));
+        assertEquals(calls, wallet.calls);
+      }
+      try (var ledger = HoldingsLedger.open(dir)) {
+        var desk = new TradingDesk(ledger, wallet, policy, "CUSTOM", "EXCHANGE");
+        desk.configure("CUSTOM", "EXCHANGE", new BigDecimal("250"), 1000, 10000, true);
+        assertEquals(0, desk.remaining(23999).orElseThrow().signum());
+        assertThrows(
+            IllegalArgumentException.class, () -> desk.quote(player, Side.SELL, 1, 1, 23999));
+        assertEquals(0, new BigDecimal("250").compareTo(desk.remaining(24000).orElseThrow()));
+        trade(desk, Side.SELL, 1, 100, 24000);
+      }
+    }
+  }
+
+  @Test
+  public void unlimitedDefaultAndIndustryOverrideBothApplyIncludingPreviouslyUncappedSales()
+      throws Exception {
+    var wallet = new Wallet();
+    Path dir = Files.createTempDirectory("uncapped-payout");
+    try (var ledger = HoldingsLedger.open(dir)) {
+      var desk =
+          new TradingDesk(ledger, wallet, policy(UNLIMITED_LIQUIDITY, "0"), "CUSTOM", "EXCHANGE");
+      assertTrue(desk.remaining(0).isEmpty());
+      trade(desk, Side.BUY, 10, 1, 0);
+      trade(desk, Side.SELL, 2, 100, 1);
+      assertEquals(0, new BigDecimal("200").compareTo(ledger.paidOut(0, "CUSTOM")));
+      desk.configure("CUSTOM", "EXCHANGE", new BigDecimal("250"), 1000, 10000, true);
+      assertEquals(0, new BigDecimal("50").compareTo(desk.remaining(1).orElseThrow()));
+      var offer = desk.quote(player, Side.SELL, 8, 50, 2);
+      assertEquals(1, offer.offered());
+      desk.confirm(player, offer.id(), 2);
+      assertThrows(IllegalArgumentException.class, () -> desk.quote(player, Side.SELL, 1, 1, 3));
+      desk.configure("CUSTOM", "EXCHANGE", null, 1000, 10000, true);
+      assertTrue(desk.remaining(3).isEmpty());
+      desk.activate(policy(UNLIMITED_LIQUIDITY, "300"));
+      trade(desk, Side.SELL, 1, 50, 3);
+      assertEquals(0, desk.remaining(3).orElseThrow().signum());
+      assertEquals(0, ledger.reserve("EXCHANGE").signum());
+    }
+  }
+
+  @Test
+  public void rejectedAndUncertainSalesCountOnlyAfterCommitWithoutRetry() throws Exception {
+    for (var mode : TradePreview.SettlementMode.values()) {
+      Path dir = Files.createTempDirectory("payout-payment");
+      var wallet = new Wallet();
+      var policy = policy(mode, "100");
+      try (var ledger = HoldingsLedger.open(dir)) {
+        var desk = new TradingDesk(ledger, wallet, policy, "CUSTOM", "EXCHANGE");
+        trade(desk, Side.BUY, 10, 100, 0);
+        wallet.reject = true;
+        trade(desk, Side.SELL, 1, 100, 1);
+        assertEquals(0, ledger.paidOut(0, "CUSTOM").signum());
+        wallet.reject = false;
+        wallet.uncertain = true;
+        assertThrows(IllegalStateException.class, () -> trade(desk, Side.SELL, 1, 100, 2));
+        assertEquals(0, ledger.paidOut(0, "CUSTOM").signum());
+        assertEquals(3, wallet.calls);
+      }
+      try (var ledger = HoldingsLedger.open(dir)) {
+        var desk = new TradingDesk(ledger, wallet, policy, "CUSTOM", "EXCHANGE");
+        assertEquals(0, ledger.paidOut(0, "CUSTOM").signum());
+        desk.recover(3, "paid", "Verified sale receipt");
+        assertEquals(0, desk.remaining(3).orElseThrow().signum());
+        assertEquals(3, wallet.calls);
+        assertThrows(IllegalArgumentException.class, () -> desk.quote(player, Side.SELL, 1, 1, 4));
+      }
     }
   }
 

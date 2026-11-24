@@ -12,7 +12,7 @@ Start with the packaged industries. You only need an economy provider, an explic
    quadstock settlement select RESERVE_BACKED 10000
    ```
 
-   Or, for unlimited payouts:
+   Or, for liquidity without reserve constraints:
 
    ```text
    quadstock settlement select UNLIMITED_LIQUIDITY 0
@@ -24,7 +24,9 @@ Start with the packaged industries. You only need an economy provider, an explic
 
 **Unlimited liquidity:** sales can create currency without reserve limits. All markets use the installation's selected settlement mode, provider and currency precision. Per-market mode overrides are not currently supported.
 
-Modes can be changed with the same console command without resetting data; see [transition accounting](trading.md#changing-modes-without-a-reset). Existing reserves and same-day reserve payouts are retained. Unlimited-mode trades never contribute to reserve accounting.
+Modes can be changed with the same console command without resetting data; see [transition accounting](trading.md#changing-modes-without-a-reset). Existing reserves and same-day payouts from both modes are retained. Unlimited-mode trades never contribute to reserve accounting.
+
+Daily payout limits apply in both settlement modes. Each industry’s explicit limit overrides the settlement default. In unlimited mode, an inherited default of `0` is uncapped; positive overrides still apply. **Existing explicit industry limits (typically `5000` in the bundled configuration) now also constrain unlimited-mode sales.** Allowance is shared across players per ticker and resets each 24,000-tick market day. Partial offers require confirmation of the offered quantity; zero-capacity sales make no wallet call. Administrator configuration, holdings and journal data are preserved; no database migration is needed.
 
 The console selection's numeric allowance is the default for industries configured with `daily-payout-limit: inherit`. The packaged AGRI uses `inherit` to preserve the selected installation policy; the other packaged industries use 5,000 each. This number is a spending cap, **not funding**. No initial shares or market reserves are granted by adding industries.
 
@@ -91,11 +93,11 @@ Market/ticker IDs must start with an uppercase letter and use 1–16 uppercase l
 | `volatility` | Varies by ticker | Number, 0–5. Multiplier for random price noise. Zero removes random noise but does not remove event/commerce/reference movement. |
 | `events-enabled` | `true` | Enable future simulated industry events and their price effect. False stops their effect; historical event records remain. |
 | `tradable` | `true` | Pause this ticker's buys and sales while retaining its data and visibility. Global trading pause still takes precedence. |
-| `daily-payout-limit` | AGRI: `inherit`; others: `5000` | `inherit`, or positive currency amounts up to 1,000,000,000 with at most four decimal places and no more precision than the selected provider supports. Reserve mode only. |
+| `daily-payout-limit` | AGRI: `inherit`; others: `5000` | `inherit`, or positive currency amounts up to 1,000,000,000 with at most four decimal places and no more precision than the selected provider supports. Applies in both settlement modes. |
 
 The packaged company names, prices and complete item mappings are maintained in [config.yml](../src/main/resources/config.yml). They cover AGRI, MINE, TIMB, FISH, LIVE, FOOD, FLOR, GEMS, STON, META, WOOD, TEXT, MOBS, REDT, BUIL and EXPL. Items must belong to exactly one ticker. Company names and tuning are configurable; do not assume every company starts at the same price.
 
-Daily usage is recorded from committed sales and survives restart. Purchases do not restore spent allowance. Lowering a limit below today's already-used amount prevents further payouts until the next day; raising it increases today's remaining capacity. Neither change adds reserve money. A smaller funded sale offer requires explicit acceptance; an unfundable sale does not consume holdings.
+Daily usage is shared by all players per ticker, counts committed sales in both modes, and survives restart. It resets each 24,000-tick market day. Purchases do not restore spent allowance. Lowering a limit below today's already-used amount prevents further payouts until the next day; raising it increases today's remaining capacity. Neither change adds reserve money. A smaller funded sale offer requires explicit acceptance; an unfundable sale does not consume holdings.
 
 ### Add an industry to an existing market
 
@@ -203,7 +205,7 @@ Replace group names with groups that actually exist on your server. A negative l
 
 The trading desk has one **Mode: BUY / Mode: SELL** toggle. BUY uses a green emerald; SELL uses a gold ingot. Clicking switches mode while preserving quantity. The title and quote button also show the active side. Switching mode does not place an order.
 
-The trading screen retains 1/10/100/1000 presets and adds **Custom amount**. It opens an in-game dialog: enter whole shares, choose **Review order**, then **Confirm** the exact quote. Invalid quantities show an error in the amount dialog. **Back — edit amount** preserves the ticker, Buy/Sell side and requested quantity; **Cancel** returns to trade selection. Entering a quantity never moves money. The configured maximum order size applies to custom amounts too. A reserve-limited quote explicitly shows the smaller offered quantity before confirmation. Quotes still expire normally; a fresh review is required after expiry.
+The trading screen retains 1/10/100/1000 presets and adds **Custom amount**. It opens an in-game dialog: enter whole shares, choose **Review order**, then **Confirm** the exact quote. Invalid quantities show an error in the amount dialog. **Back — edit amount** preserves the ticker, Buy/Sell side and requested quantity; **Cancel** returns to trade selection. Entering a quantity never moves money. The configured maximum order size applies to custom amounts too. A reserve- or daily-limit-constrained quote explicitly shows the smaller offered quantity before confirmation. Quotes still expire normally; a fresh review is required after expiry.
 
 The optional `/qm trade MINE sell 37` shortcut remains available. It opens trade selection with the supplied amount; it does not execute a trade. Escape dismisses a dialog without placing an order. Dialog buttons expire after ten minutes; reopen Custom amount if an abandoned dialog no longer responds.
 

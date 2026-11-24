@@ -4,6 +4,7 @@ import static com.thaalur.quadstock.trading.TradePreview.SettlementMode.*;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import org.junit.Test;
 
 public class TradePreviewTest {
@@ -44,9 +45,10 @@ public class TradePreviewTest {
 
   @Test
   public void sameSaleDiffersOnlyBySettlementCapacity() {
-    var reserve = TradePreview.sale(100, 10, 10, 2, RESERVE_BACKED, money("750"), money("500"));
+    var reserve =
+        TradePreview.sale(100, 10, 10, 2, RESERVE_BACKED, money("750"), Optional.of(money("500")));
     var unlimited =
-        TradePreview.sale(100, 10, 10, 2, UNLIMITED_LIQUIDITY, BigDecimal.ZERO, BigDecimal.ZERO);
+        TradePreview.sale(100, 10, 10, 2, UNLIMITED_LIQUIDITY, BigDecimal.ZERO, Optional.empty());
     assertEquals(5, reserve.offered());
     assertEquals(money("500.00"), reserve.proceeds());
     assertTrue(reserve.needsNewAcceptance());
@@ -56,13 +58,37 @@ public class TradePreviewTest {
   }
 
   @Test
+  public void unlimitedAllowanceDistinguishesPartialExhaustedAndUncapped() {
+    var partial =
+        TradePreview.sale(
+            100, 10, 10, 2, UNLIMITED_LIQUIDITY, BigDecimal.ZERO, Optional.of(money("250")));
+    assertEquals(2, partial.offered());
+    assertTrue(partial.needsNewAcceptance());
+    assertEquals(money("200.00"), partial.proceeds());
+    assertEquals(
+        0,
+        TradePreview.sale(
+                100, 10, 10, 2, UNLIMITED_LIQUIDITY, BigDecimal.ZERO, Optional.of(BigDecimal.ZERO))
+            .offered());
+    assertThrows(
+        IllegalArgumentException.class,
+        () ->
+            TradePreview.sale(
+                100, 10, 10, 2, UNLIMITED_LIQUIDITY, BigDecimal.ZERO, Optional.of(money("-1"))));
+  }
+
+  @Test
   public void depletedReserveCannotPromiseEvenOneShare() {
-    var sale = TradePreview.sale(100, 10, 10, 2, RESERVE_BACKED, money("99.99"), money("500"));
+    var sale =
+        TradePreview.sale(
+            100, 10, 10, 2, RESERVE_BACKED, money("99.99"), Optional.of(money("500")));
     assertEquals(0, sale.offered());
     assertEquals(0, sale.proceeds().signum());
     assertTrue(sale.needsNewAcceptance());
     assertEquals(
-        7, TradePreview.sale(100, 10, 10, 2, RESERVE_BACKED, money("750"), money("900")).offered());
+        7,
+        TradePreview.sale(100, 10, 10, 2, RESERVE_BACKED, money("750"), Optional.of(money("900")))
+            .offered());
   }
 
   @Test
@@ -84,6 +110,8 @@ public class TradePreviewTest {
         IllegalArgumentException.class, () -> TradePreview.sale(100, 10, 10, 2, null, null, null));
     assertThrows(
         IllegalArgumentException.class,
-        () -> TradePreview.sale(100, 10, 10, 2, RESERVE_BACKED, money("-1"), money("100")));
+        () ->
+            TradePreview.sale(
+                100, 10, 10, 2, RESERVE_BACKED, money("-1"), Optional.of(money("100"))));
   }
 }

@@ -140,7 +140,7 @@ final class TradingScreens {
             "Expires: " + MarketCalendar.format(quote.expires()),
             menus.desk.status(),
             quote.offered() != quote.requested()
-                ? "Funding is limited: this is a SMALLER offer."
+                ? "Daily payout limit or reserve: this is a SMALLER offer."
                 : "Full requested quantity.",
             "Only the offered quantity will be executed."));
     menu.button(

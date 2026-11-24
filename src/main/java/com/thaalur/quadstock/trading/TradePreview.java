@@ -2,12 +2,13 @@ package com.thaalur.quadstock.trading;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Optional;
 
 /** Pure estimates, never executable quotes or permission to move funds. */
 public final class TradePreview {
   /**
-   * Reserve-backed sales require market funds and ticker allowance; unlimited sales may create
-   * currency.
+   * Both modes respect ticker allowance. Reserve-backed sales also require market funds; unlimited
+   * liquidity sales may create currency.
    */
   public enum SettlementMode {
     RESERVE_BACKED,
@@ -85,8 +86,8 @@ public final class TradePreview {
   }
 
   /**
-   * Computes a read-only sale offer for owned shares. Reserve mode caps the offered count by both
-   * reserve and ticker allowance; unlimited mode offers the full requested count.
+   * Computes a read-only sale offer for owned shares. Both modes respect tickerRemaining; empty
+   * means uncapped, while zero means exhausted. Reserve mode additionally requires market funds.
    */
   public static Sale sale(
       double mark,
@@ -95,14 +96,18 @@ public final class TradePreview {
       int digits,
       SettlementMode mode,
       BigDecimal marketReserve,
-      BigDecimal tickerRemaining) {
+      Optional<BigDecimal> tickerRemaining) {
     quantity(requested);
     if (holdings < requested || mode == null)
       throw new IllegalArgumentException("Insufficient holdings or missing policy");
     BigDecimal unit = price(mark, digits);
     int offered = requested;
+    BigDecimal capacity = tickerRemaining.map(left -> funds(left, digits)).orElse(null);
     if (mode == SettlementMode.RESERVE_BACKED) {
-      BigDecimal capacity = funds(marketReserve, digits).min(funds(tickerRemaining, digits));
+      BigDecimal reserve = funds(marketReserve, digits);
+      capacity = capacity == null ? reserve : capacity.min(reserve);
+    }
+    if (capacity != null) {
       offered =
           capacity.divideToIntegralValue(unit).min(BigDecimal.valueOf(requested)).intValueExact();
     }

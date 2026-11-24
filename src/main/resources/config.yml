@@ -138,6 +138,7 @@ industries:
     tradable: true
     share-supply: unlimited
     max-shares-per-player: unlimited
+    # Applies in both modes; inherit uses the settlement default (0 is uncapped in unlimited mode).
     daily-payout-limit: inherit
 # ========================================
 # MINING

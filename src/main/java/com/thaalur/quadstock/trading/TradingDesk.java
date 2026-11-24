@@ -220,11 +220,14 @@ public final class TradingDesk {
     if (!enabled) return "Trading paused by configuration.";
     if (policy == null) return "Trading closed: administrator must select a settlement policy.";
     if (ledger.blocked()) return "Trading blocked: journal requires recovery.";
+    BigDecimal limit = dailyLimit == null ? policy.dailyLimit() : dailyLimit;
     return "Policy: "
         + policy.mode()
         + (policy.mode() == RESERVE_BACKED
             ? " · Reserve " + CurrencyFormat.exact(ledger.reserve(market))
-            : " · Sales may create currency");
+            : " · Sales may create currency")
+        + " · Daily payout limit: "
+        + (limit.signum() == 0 ? "uncapped" : CurrencyFormat.exact(limit));
   }
 
   private void ready() {
@@ -236,13 +239,13 @@ public final class TradingDesk {
   }
 
   /**
-   * Returns this ticker’s remaining reserve-mode allowance for the day containing tick. Requires a
-   * selected policy; buys do not replenish daily allowance.
+   * Returns this ticker’s remaining allowance for the day containing tick, or empty when uncapped.
+   * Requires a selected policy; buys and mode changes do not replenish daily allowance.
    */
-  public synchronized BigDecimal remaining(long tick) {
-    return (dailyLimit == null ? policy.dailyLimit() : dailyLimit)
-        .subtract(ledger.paidOut(tick / 24000, ticker))
-        .max(BigDecimal.ZERO);
+  public synchronized Optional<BigDecimal> remaining(long tick) {
+    BigDecimal limit = dailyLimit == null ? policy.dailyLimit() : dailyLimit;
+    if (limit.signum() == 0) return Optional.empty();
+    return Optional.of(limit.subtract(ledger.paidOut(tick / 24000, ticker)).max(BigDecimal.ZERO));
   }
 
   /** Read-only MAX selection, capped by the configured order limit. Sales still need funding. */
@@ -288,7 +291,7 @@ public final class TradingDesk {
               remaining(tick));
       if (s.offered() == 0)
         throw new IllegalArgumentException(
-            "No shares can be funded by the reserve / ticker allowance");
+            "No shares can be sold within the daily payout limit or available market reserve");
       offered = s.offered();
       unit = s.unitPrice();
       amount = s.proceeds();
@@ -338,9 +341,8 @@ public final class TradingDesk {
     if (q.side == Side.SELL) {
       if (position(player).shares() < q.offered)
         throw new IllegalArgumentException("Holdings changed");
-      if (policy.mode() == RESERVE_BACKED
-          && (ledger.reserve(market).compareTo(q.amount) < 0
-              || remaining(tick).compareTo(q.amount) < 0))
+      if ((policy.mode() == RESERVE_BACKED && ledger.reserve(market).compareTo(q.amount) < 0)
+          || remaining(tick).map(left -> left.compareTo(q.amount) < 0).orElse(false))
         throw new IllegalStateException("Sale funding changed; request a new quote");
     }
     Intent intent =

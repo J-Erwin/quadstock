@@ -220,15 +220,12 @@ public final class HoldingsLedger implements AutoCloseable {
     return funds;
   }
 
-  /**
-   * Sums committed reserve-backed sale totals for a ticker using intent day, not wall-clock date.
-   */
+  /** Sums all committed sale totals for a ticker using intent day, not wall-clock date. */
   public synchronized BigDecimal paidOut(long day, String ticker) {
     BigDecimal result = BigDecimal.ZERO;
     for (Entry e : entries)
       if (e.state() == State.COMMITTED
           && e.intent.side == Side.SELL
-          && e.intent.mode == TradePreview.SettlementMode.RESERVE_BACKED
           && e.intent.ticker.equals(ticker)
           && e.intent.tick / 24000 == day) result = result.add(e.intent.amount);
     return result;
