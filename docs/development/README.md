@@ -59,3 +59,11 @@ Document side effects, units, ownership, ordering and failure behavior where the
 The current test fixtures and scripts are development tools, not evidence of production load or every provider's correctness. Manual client, economy-provider, commerce-integration and production-load checks remain outstanding.
 
 Event economics live in `events/EventSettings`, narrative loading in `events/StoryCatalog`, and persisted selection/cooldown state in `events/EventEngine`. `LivingMarket` consumes resolved events and stores their immutable terms with the SQLite snapshot. `notifications/PortfolioNews` owns bounded pending news separately from delivery cadence; the report sender acknowledges batches after dispatch. `stories.yml` is installed only when absent and is validated by the same settings loader used by startup and `config check`.
+
+## Release builds
+
+GitHub Actions builds pushes and pull requests for `dev` and `main` using Java 25. Successful builds upload the JAR, matching source ZIP, notices and SHA-256 checksums. Development and pull-request builds receive distinct version suffixes. Reproduce one from its source ZIP with `bash gradlew clean build -PbuildVersion=<version>`.
+
+Only a pushed stable tag such as `v1.0.0` publishes a GitHub Release. Its version must match `build.gradle.kts`, its commit must be reachable from `main`, and all checks must pass. Push or merge the release commit to `main` before pushing its annotated tag. Branch builds do not publish releases, and existing releases are not overwritten by reruns.
+
+The build produces `build/distributions/quadstock-<version>-source.zip` with matching source, build files and licensing notices. Distribute it alongside the JAR. It excludes the separately installed server and dependencies; consult [third-party notices](../../THIRD_PARTY_NOTICES.md) when distributing a combined server bundle.
