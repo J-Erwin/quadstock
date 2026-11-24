@@ -215,8 +215,6 @@ Live charts now use nine **fixed 6-minute-40-second market buckets**, covering a
 
 The build packages `assets/cli-message.txt` as console artwork. Edit that source asset and rebuild to change the banner. Startup also prints plugin/Paper/Java versions, SQLite journal mode/path, configured exchanges/tickers/item mappings, retained observations, logical time, journal recovery state, Vault provider/precision, settlement mode, QuickShop status, LuckPerms availability, report/refresh cadence and elapsed startup time. Read warning lines as well as the completion line: browsing may be available while trading is closed because no policy or provider is available.
 
-For the current growth model and recommended next step, read the [simulation review](development/simulation-review.md).
-
 ### Default ticker selection
 
 `default-ticker` is an optional top-level setting. The packaged value is `AGRI`; set it to any configured industry ID. An unknown ID or quoted empty string is rejected at startup and by `/qm config check`. Omitting the key selects the first configured industry in YAML order. Paper also treats a YAML null or an empty value after the colon as omitted. Changing this selection does not rename tickers, move holdings, or change item routing. Entirely custom tickers and exchange IDs are supported on a fresh installation. Run `/qm reload` to apply changes.

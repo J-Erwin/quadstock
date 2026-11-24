@@ -35,7 +35,6 @@ This database starts fresh. Prior local test files are not imported. Stop Paper 
 - [Trading setup and recovery](docs/trading.md)
 - [Developer architecture and build](docs/development/README.md)
 - [Command reference](docs/development/commands.md)
-- [Simulation and long-term growth review](docs/development/simulation-review.md)
 
 `./gradlew javadoc` generates searchable HTML at `build/docs/javadoc/index.html`. `./gradlew formatJava` applies the pinned Java formatter; `clean build` applies/checks formatting, builds documentation and runs tests. The build does not start a Minecraft server.
 

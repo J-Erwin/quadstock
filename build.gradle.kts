@@ -114,7 +114,7 @@ val releaseSources = tasks.register<Zip>("releaseSources") {
         include("assets/cli-message.txt")
         include("docs/admin-guide.md", "docs/trading.md")
         include("docs/development/README.md", "docs/development/commands.md")
-        include("docs/development/overview.html", "docs/development/simulation-review.md")
+        include("docs/development/overview.html")
         exclude("**/build/**")
     }
 }
